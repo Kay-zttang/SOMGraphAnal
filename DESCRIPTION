@@ -1,0 +1,23 @@
+Package: SOMGraphAnal
+Title: The calculation and analysis of SOM network CONN matrix based on graph theory.
+Version: 1.0.0.0000
+Authors@R: 
+    person("Kay (Ziting)", "Tang", , "Ziting.Tang@yahoo.com", role = c("aut", "cre")
+Description: 
+    The package serves a complement as the NeuroScopeIO package dealing with 
+    NeuroScope and Khoros files. It focus on the graph evaluation (including both 
+    graph property and graph similarity) on the specific CONN graph resulting from 
+    the learning process of SOM(self-organizing map) network. 
+    
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+      box,
+      openxlsx,
+      igraph,
+      dplyr,
+      NeuroScopeIO
+      
