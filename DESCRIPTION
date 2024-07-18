@@ -2,7 +2,7 @@ Package: SOMGraphAnal
 Title: The calculation and analysis of SOM network CONN matrix based on graph theory.
 Version: 1.0.0.0000
 Authors@R: 
-    person("Kay (Ziting)", "Tang", , "Ziting.Tang@yahoo.com", role = c("aut", "cre")
+    person("Kay", "Tang", "Ziting.Tang@yahoo.com", role = c("aut", "cre")
 Description: 
     The package serves a complement as the NeuroScopeIO package dealing with 
     NeuroScope and Khoros files. It focus on the graph evaluation (including both 
