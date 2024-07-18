@@ -2,7 +2,7 @@
 % Please edit documentation in R/bulk.R
 \name{bulk.calc_SOM}
 \alias{bulk.calc_SOM}
-\title{Bulk load parameter table.}
+\title{Bulk calculate graph properties for CONN.}
 \usage{
 bulk.calc_SOM(
   source.df,
@@ -12,14 +12,29 @@ bulk.calc_SOM(
 )
 }
 \arguments{
-\item{infile}{Path to the input .parm/.txt file with the directories of .cadj file}
+\item{source.df}{The data frame containing directories and related info about the
+CONN matrix from multiple stages. The detailed information of the dataframe
+is referring to \code{\link[=bulk.parm_SOM]{bulk.parm_SOM()}}.}
+
+\item{supervised}{The choice of with or w/o supervised measurements in the calculation.}
+
+\item{save_to.excel}{The choice for save all properties to an .xlsx file in the current working directory.}
+
+\item{method}{The choice for taking \code{allPEs}: all PEs or \code{activePEs}: active PEs into account.}
 }
 \value{
-A data frame with each row showing the current learning steps and
-directories of related SOM files.
+A list with graph measurement results.
+
+\code{graph.property} A total of 31 Unsupervised properties and 1 supervised property of the CONN graph
+
+\code{graph.degree} Degree vector of the CONN graph
+
+\code{graph.eigenvalue} Eigenvalue vector of the CONN graph
 }
 \description{
-This function search realated possible wwightcube .wgtcub/.wgt.xv file and
-the class label .nunr file for the input list of CONN .cadj file for each
-learning steps. And integrated as an output dataframe.
+This function create graph objects and futher calculate supervised and unsupervised
+graph properties that are adaptive to CONN graph for multiple stages of CONN matrix.
+}
+\seealso{
+\link[=calc.graph_property]{load.graph_SOM()} for the single stage version of calculation
 }

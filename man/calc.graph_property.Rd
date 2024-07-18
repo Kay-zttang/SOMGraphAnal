@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc.R
 \name{calc.graph_property}
 \alias{calc.graph_property}
-\title{Calculate graph properties}
+\title{Calculate graph properties for CONN.}
 \usage{
 calc.graph_property(
   list,
@@ -12,17 +12,43 @@ calc.graph_property(
 )
 }
 \arguments{
-\item{save_to.excel}{The choice for save all to an .xlsx file in the subfolder '/res'}
+\item{list}{The list contains both the graph object and the related infomation of the
+CONN matrix. For the detailed explanation of the list see \code{\link[=load.graph_SOM]{load.graph_SOM()}}}
 
-\item{method}{The choice for taking "allPEs": all PEs \ "activePEs": active PEs into account}
+\item{supervised}{The choice of with or w/o supervised measurements in the calculation.}
 
-\item{conn.graph}{A CONN graph}
+\item{save_to.excel}{The choice for save all properties to an .xlsx file in the current working directory}
 
-\item{param.table}{The key-value pair parameter table}
+\item{method}{The choice for taking \code{allPEs}: all PEs or \code{activePEs}: active PEs into account.}
 }
 \value{
 A list with graph measurement results.
+
+\code{graph.property} A total of 31 Unsupervised properties and 1 supervised property of the CONN graph
+
+\code{graph.degree} Degree vector of the CONN graph
+
+\code{graph.eigenvalue} Eigenvalue vector of the CONN graph
 }
 \description{
-This function calculate several graph properties for CONN graph.
+This function calculate supervised and unsupervised graph properties that are adaptive to CONN graph.
 }
+\section{Additional notice}{
+
+
+Although most of the properties implemented in this function are directly from \link{igraph}, several
+of they have different basis of concepts and equations with the adaption to CONN graph object.
+For example:
+\itemize{
+\item \verb{Weighted clustering coefficient} which generated from the vertex-level clustering coefficient and
+further transfer to graph-level weighted clustering coefficient. For more information please refer
+to \code{\link[igraph:transitivity]{igraph::transitivity()}}
+\item \verb{Weighted subgraph centrality} which take weighted adjacency matrix of th graph into the
+calculation instead of the binary adjacency matrix used in \code{\link[igraph:subgraph_centrality]{igraph::subgraph_centrality()}}
+\item \verb{Harmonic centrality index} | \verb{(Weighted) Subgraph centrality index} The graph-level index are
+normalized on \code{n-1} of vertex size \code{n} of the graph. While other centrality index mentioned
+are normalized by the theoretical maximum value through the build in function. The centralization
+and normalization are implemented through \code{\link[igraph:centralize]{igraph::centralize()}}
+}
+}
+

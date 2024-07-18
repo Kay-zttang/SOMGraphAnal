@@ -8,7 +8,7 @@ Description:
     NeuroScope and Khoros files. It focus on the graph evaluation (including both 
     graph property and graph similarity) on the specific CONN graph resulting from 
     the learning process of SOM(self-organizing map) network. 
-    
+URL: https://github.com/Kay-zttang/SOMGraphAnal.git
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
@@ -20,4 +20,9 @@ Imports:
       igraph,
       dplyr,
       NeuroScopeIO
-      
+Suggests:
+    ggplots,
+    here,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

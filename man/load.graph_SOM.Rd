@@ -7,12 +7,26 @@
 load.graph_SOM(source.df, method = "weighted")
 }
 \arguments{
-\item{source.df}{The product data frame from func:load.parm_SOM.}
+\item{source.df}{The data frame containing directories and related info about the
+current CONN matrix. The detailed information of the dataframe
+is referring to \code{\link[=load.parm_SOM]{load.parm_SOM()}}.}
 
-\item{method}{Set the graph type: "weighted": weighted graph/ "binary": binary graph}
+\item{method}{Set the graph type:
+\itemize{
+\item \code{weighted} weighted graph
+\item \code{binary} binary graph
+}}
 }
 \value{
-A list consists of both the graph object and the related parameter data frame
+A list consists of both the graph object and the related infomation of the CONN matrix.
+
+\code{steps} The learn step of the CONN matrix when doing a recall.
+
+\code{root} The root name of the related CONN matrix file.
+
+\code{conn} The CONN matrix in matrix form.
+
+\code{conn.graph} The corresponding igraph object created by a CONN matrix
 }
 \description{
 This function built a graph for the CONN matrix based on the related SOM products

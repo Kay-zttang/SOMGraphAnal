@@ -2,11 +2,18 @@
 #'
 #' This function search realated possible wwightcube .wgtcub/.wgt.xv file and 
 #' the class label .nunr file for the input list of CONN .cadj file for each 
-#' learning steps. And integrated as an output dataframe.
+#' learning steps. And integrated as an output dataframe. 
 #' 
-#' @param infile Path to the input .parm/.txt file with the directories of .cadj file
-#' @return A data frame with each row showing the current learning steps and 
-#' directories of related SOM files.
+#' @param infile Path to the input .parm/.txt file containing directories of CADJ file in Khoros Viff format
+#' @return A data frame containing directories and related info about the input 
+#' CONN matrix. The column names with explanations as follows: 
+#' * `steps` The learn step of the CONN matrix when doing a recall
+#' * `root_name` The root name of the related CONN matrix file
+#' * `cadj_matrix` The CADJ matrix
+#' * `weight_cube` The weight cube in matrix form
+#' * `nunr` The nunr file containing class label knowledge
+#' @seealso [load.parm_SOM()] for a version with input of one directory.
+#' 
 #' @export
 bulk.parm_SOM <- function(infile){
   inputs = as.vector(read.table(infile)$V1)
@@ -29,15 +36,25 @@ bulk.parm_SOM <- function(infile){
   data.df
 }
 
-#' Bulk load parameter table.
+#' Bulk calculate graph properties for CONN.
 #'
-#' This function search realated possible wwightcube .wgtcub/.wgt.xv file and 
-#' the class label .nunr file for the input list of CONN .cadj file for each 
-#' learning steps. And integrated as an output dataframe.
+#' This function create graph objects and futher calculate supervised and unsupervised 
+#' graph properties that are adaptive to CONN graph for multiple stages of CONN matrix. 
 #' 
-#' @param infile Path to the input .parm/.txt file with the directories of .cadj file
-#' @return A data frame with each row showing the current learning steps and 
-#' directories of related SOM files.
+#' @param source.df The data frame containing directories and related info about the 
+#' CONN matrix from multiple stages. The detailed information of the dataframe
+#' is referring to [bulk.parm_SOM()].
+#' @param supervised The choice of with or w/o supervised measurements in the calculation.
+#' @param save_to.excel  The choice for save all properties to an .xlsx file in the current working directory.
+#' @param method  The choice for taking `allPEs`: all PEs or `activePEs`: active PEs into account.
+#' @return  A list with graph measurement results.
+#' 
+#' `graph.property` A total of 31 Unsupervised properties and 1 supervised property of the CONN graph
+#' 
+#' `graph.degree` Degree vector of the CONN graph
+#' 
+#' `graph.eigenvalue` Eigenvalue vector of the CONN graph
+#' @seealso [load.graph_SOM()][calc.graph_property()] for the single stage version of calculation
 #' @export
 bulk.calc_SOM <- function(source.df, supervised = FALSE, save_to.excel = FALSE, method = "allPEs"){
   wb <- openxlsx::createWorkbook()

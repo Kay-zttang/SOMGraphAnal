@@ -1,12 +1,20 @@
 #' Load parameter table.
 #'
-#' This function search realated possible wwightcube .wgtcub/.wgt.xv file and 
+#' This function search related possible weightcube .wgtcub/.wgt.xv file and 
 #' the class label .nunr file for the input list of CONN .cadj file for each 
-#' learning steps. And integrated as an output dataframe.
+#' learning steps. Thus integrated them as an output dataframe.
 #' 
-#' @param infile Path to the input .cadj file
-#' @return A data frame with only one row showing the current learning steps and 
-#' directories of related SOM files.
+#' @param infile Path to the input CADJ file in Khoros Viff format
+#' @return A data frame containing directories and related info about the input 
+#' CONN matrix. The column names with explanations as follows: 
+#' * `steps` The learn step of the CONN matrix when doing a recall
+#' * `root_name` The root name of the related CONN matrix file
+#' * `cadj_matrix` The CADJ matrix
+#' * `weight_cube` The weight cube in matrix form
+#' * `nunr` The nunr file containing class label knowledge#' 
+#' @seealso [bulk.parm_SOM()] for a version with bulk loading a text file of several 
+#' stages of CADJ file.
+#' 
 #' @export
 load.parm_SOM <- function(infile){
   data.df = data.frame(matrix(ncol = 5, nrow = 0))
@@ -34,9 +42,21 @@ load.parm_SOM <- function(infile){
 #' This function built a graph for the CONN matrix based on the related SOM products
 #' accessing from directory link. 
 #'
-#' @param source.df The product data frame from func:load.parm_SOM.
-#' @param method Set the graph type: "weighted": weighted graph/ "binary": binary graph
-#' @returns A list consists of both the graph object and the related parameter data frame
+#' @param source.df The data frame containing directories and related info about the 
+#' current CONN matrix. The detailed information of the dataframe
+#' is referring to [load.parm_SOM()].
+#' @param method Set the graph type: 
+#' * `weighted` weighted graph
+#' * `binary` binary graph
+#' @returns A list consists of both the graph object and the related infomation of the CONN matrix.
+#' 
+#' `steps` The learn step of the CONN matrix when doing a recall.
+#' 
+#' `root` The root name of the related CONN matrix file.
+#' 
+#' `conn` The CONN matrix in matrix form.
+#' 
+#' `conn.graph` The corresponding igraph object created by a CONN matrix
 #' @export
 load.graph_SOM <- function(source.df, method = "weighted"){
   cadj = NeuroScopeIO::read_khoros_viff(filename = source.df$cadj_matrix, verbose = F)

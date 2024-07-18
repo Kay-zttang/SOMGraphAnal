@@ -1,12 +1,35 @@
-#' Calculate graph properties
+#' Calculate graph properties for CONN.
 #'
-#' This function calculate several graph properties for CONN graph. 
+#' This function calculate supervised and unsupervised graph properties that are adaptive to CONN graph. 
+#' 
+#' @section Additional notice:
+#' 
+#' Although most of the properties implemented in this function are directly from [igraph], several 
+#' of they have different basis of concepts and equations with the adaption to CONN graph object.
+#' For example:
+#' * `Weighted clustering coefficient` which generated from the vertex-level clustering coefficient and 
+#' further transfer to graph-level weighted clustering coefficient. For more information please refer 
+#' to [igraph::transitivity()]
+#' * `Weighted subgraph centrality` which take weighted adjacency matrix of th graph into the 
+#' calculation instead of the binary adjacency matrix used in [igraph::subgraph_centrality()]
+#' * `Harmonic centrality index` | `(Weighted) Subgraph centrality index` The graph-level index are 
+#' normalized on `n-1` of vertex size `n` of the graph. While other centrality index mentioned
+#' are normalized by the theoretical maximum value through the build in function. The centralization 
+#' and normalization are implemented through [igraph::centralize()]
 #'
-#' @param conn.graph A CONN graph
-#' @param param.table The key-value pair parameter table 
-#' @param method  The choice for taking "allPEs": all PEs \ "activePEs": active PEs into account
-#' @param save_to.excel  The choice for save all to an .xlsx file in the subfolder '/res'
+#'
+#' @param list The list contains both the graph object and the related infomation of the 
+#' CONN matrix. For the detailed explanation of the list see [load.graph_SOM()]
+#' @param supervised The choice of with or w/o supervised measurements in the calculation.
+#' @param method  The choice for taking `allPEs`: all PEs or `activePEs`: active PEs into account.
+#' @param save_to.excel  The choice for save all properties to an .xlsx file in the current working directory
 #' @return A list with graph measurement results.
+#' 
+#' `graph.property` A total of 31 Unsupervised properties and 1 supervised property of the CONN graph
+#' 
+#' `graph.degree` Degree vector of the CONN graph
+#' 
+#' `graph.eigenvalue` Eigenvalue vector of the CONN graph
 #' @export
 calc.graph_property <- function(list, supervised = FALSE, save_to.excel = FALSE, method = "allPEs"){
   options(scipen=999)
@@ -108,14 +131,14 @@ calc.graph_property <- function(list, supervised = FALSE, save_to.excel = FALSE,
   c_b.tmax = igraph::centr_betw(gconn)$theoretical_max
   c_ev = igraph::centr_eigen(gconn)$centralization # eigenvector centrality index
   c_ev.tmax = igraph::centr_eigen(gconn)$theoretical_max
-  c_h = igraph::centralize(igraph::harmonic_centrality(gconn), length(igraph::V(gconn))) ##harmonic centrality index in eq(9)
-  c_sc = igraph::centralize(igraph::subgraph_centrality(gconn), length(igraph::V(gconn))) ##subgraph centrality
+  c_h = igraph::centralize(igraph::harmonic_centrality(gconn), length(igraph::V(gconn))-1) ##harmonic centrality index in eq(9)
+  c_sc = igraph::centralize(igraph::subgraph_centrality(gconn), length(igraph::V(gconn))-1) ##subgraph centrality
   # for subgraph centrality the function only calculated as binary adjacency Matrix as_adj(gconn)
   # To get an orthonormal eigenbasis of eigenvectors (Normalization; already)
   # typically dividing by its length sqrt(transpose(v)*v)
   # manually calculation as belows:
   # eig$vectors^2 %*% exp(eig$values)
-  c_wsc = igraph::centralize(eig$vectors^2 %*% exp(eig$values), length(igraph::V(gconn)))
+  c_wsc = igraph::centralize(eig$vectors^2 %*% exp(eig$values), length(igraph::V(gconn))-1)
   
   add = c(c_d, c_d.tmax, c_c, c_c.tmax, c_b, c_b.tmax, c_ev, c_ev.tmax, c_h, c_sc, c_wsc)
   property = append(property, add)
@@ -162,9 +185,7 @@ calc.graph_property <- function(list, supervised = FALSE, save_to.excel = FALSE,
   colnames(eigen) = c(paste0(format(list$steps, big.mark = ",", scientific = F), ' steps'))
   eigen.out <- tibble::rownames_to_column(eigen, " ") 
   
-  subDir <- "res"
-  dir.create(file.path(mainDir, subDir), showWarnings = FALSE)
-  dir = paste0('res/graph_measurements.',list$root,'.xlsx')
+  dir = paste0('graph_measurements.',list$root,".", format(Sys.Date(), "%d%b%Y"),'.xlsx')
   
   if (save_to.excel) {
     if(method == 'allPEs'){

@@ -7,14 +7,25 @@
 load.parm_SOM(infile)
 }
 \arguments{
-\item{infile}{Path to the input .cadj file}
+\item{infile}{Path to the input CADJ file in Khoros Viff format}
 }
 \value{
-A data frame with only one row showing the current learning steps and
-directories of related SOM files.
+A data frame containing directories and related info about the input
+CONN matrix. The column names with explanations as follows:
+\itemize{
+\item \code{steps} The learn step of the CONN matrix when doing a recall
+\item \code{root_name} The root name of the related CONN matrix file
+\item \code{cadj_matrix} The CADJ matrix
+\item \code{weight_cube} The weight cube in matrix form
+\item \code{nunr} The nunr file containing class label knowledge#'
+}
 }
 \description{
-This function search realated possible wwightcube .wgtcub/.wgt.xv file and
+This function search related possible weightcube .wgtcub/.wgt.xv file and
 the class label .nunr file for the input list of CONN .cadj file for each
-learning steps. And integrated as an output dataframe.
+learning steps. Thus integrated them as an output dataframe.
+}
+\seealso{
+\code{\link[=bulk.parm_SOM]{bulk.parm_SOM()}} for a version with bulk loading a text file of several
+stages of CADJ file.
 }
